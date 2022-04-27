@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-
+from mainapp.models import Product, ProductCategory
 
 MENU_LIST = {
     'index': 'Главная',
@@ -33,39 +33,15 @@ INDEX_SLIDER_LIST = [
 ]
 
 def products(request):
+    products = Product.objects.all()[:]
+    categories = ProductCategory.objects.all()[:]
     return render(
         request,
         'mainapp/products.html',
         context = {
             'menu': MENU_LIST,
-            'products': [
-                {
-                    'name': 'Люстра', 
-                    'description': 'Отличныый дизанй', 
-                    'image': 'product-11.jpg',
-                },
-                {
-                    'name': 'Красивый стул', 
-                    'description': 'Минималистичный дизайн', 
-                    'image': 'product-21.jpg'
-                },
-                {
-                    'name': 'Светильник Черный', 
-                    'description': 'Отличный дизайн', 
-                    'image': 'product-31.jpg'
-                },
-                {
-                    'name': 'Еще один продукт', 
-                    'description': 'Удобство и комфорт', 
-                    'image': 'product-41.jpg'
-                },
-                {
-                    'name': 'Еще один продукт', 
-                    'description': 'Удобство и комфорт', 
-                    'image': 'product-51.jpg'
-                },
-
-            ]
+            'products': products,
+            'categories': categories
         } 
     )
 
