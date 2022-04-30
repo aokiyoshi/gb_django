@@ -5,7 +5,7 @@ from mainapp.models import Product, ProductCategory
 MENU_LIST = {
     'index': 'Главная',
     'products': 'Продукты',
-    'contacts': 'Контакты'
+    'contacts': 'Контакты',
 }
 
 INDEX_SLIDER_LIST = [
