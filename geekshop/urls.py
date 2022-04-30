@@ -26,7 +26,6 @@ favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('', index, name='index'),
     path('<int:slide_number>/', index, name='index'),
     path('contacts/', contacts, name='contacts'),
