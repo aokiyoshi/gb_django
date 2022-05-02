@@ -1,0 +1,26 @@
+{% load static %}
+
+<div class="related">
+    <div class="title clearfix">
+        {% with url_name=request.resolver_match.url_name %}
+        <h2>
+           {% if url_name == 'products' %} Все товары: {% else %} {{category_name}}: {% endif %} 
+        </h2>
+        {% endwith %}
+    </div>
+    <div class="related-products clearfix">
+        {% for  product in products %}
+        <div class="block">
+            <a href="{% url 'basket:add' product.pk %}">
+                <img class="product-image" src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
+                <div class="text">
+                    <img src="{% static 'img/icon-hover.png' %}" alt="img">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.description}}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>

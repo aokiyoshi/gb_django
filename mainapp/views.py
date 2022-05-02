@@ -63,3 +63,18 @@ def contacts(request):
             'menu': MENU_LIST
         } 
     )
+
+def category(request, category_id):
+    if ProductCategory.objects.filter(id=category_id):
+        products = Product.objects.filter(category=category_id)
+        categories = ProductCategory.objects.all()[:]
+        return render(
+            request,
+            'mainapp/products.html',
+            context = {
+                'menu': MENU_LIST,
+                'products': products,
+                'categories': categories,
+                'category_name': ProductCategory.objects.filter(pk=category_id).all()[0]
+            } 
+        )

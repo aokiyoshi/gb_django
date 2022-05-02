@@ -1009,7 +1009,7 @@ td:first-child {
 }
 
 .related {
-	padding: 0px 98px;
+	padding: 0px 0px;
 }
 .related .title {
 	height: 343px;
@@ -1074,4 +1074,14 @@ td:first-child {
 .avatar {
 	vertical-align: middle;
 	border-radius: 50%;
+}
+
+.product-image {
+	height: auto;
+	width: 100%;
+}
+
+.product-image img {
+    height: inherit;
+    width: inherit;
 }

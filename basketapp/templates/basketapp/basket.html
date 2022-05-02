@@ -1,0 +1,47 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'basket-style.css' %}">
+
+<div class="category-products clearfix">
+    <button>
+        <a href="{% url 'index' %}" class="">
+            < на главную
+        </a>
+    </button>
+    {% if request.user.basket.quantity != 0 %}
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Убрать</th>
+        </tr>
+        {% for basket_element in basket %}
+            <tr>
+                <td>{{basket_element.product.name}}</td>
+                <td>{{basket_element.quantity}} шт.</td>
+                <td>{{basket_element.product.price}}</td>
+                <td>
+                    <a href="{% url 'basket:remove' basket_element.pk %}">Удалить</a>
+                </td>
+            </tr>
+        {% endfor %}
+            
+            <tr>
+                <td>Всего</td>
+                <td>{{ request.user.basket.quantity}} шт.</td>
+                <td>{{ request.user.basket.sum }}</td>
+                <td>
+                    <a href="{% url 'basket:remove_all' %}">Удалить все</a>
+                </td>
+            </tr>   
+    </table>
+    {% else %}
+        <br>
+        <h2>В корзине пусто!</h2>
+
+        <a href="{% url 'products' %}" class="">
+            <h2>За покупками!</h2>
+        </a>
+    {% endif %}
+</div>

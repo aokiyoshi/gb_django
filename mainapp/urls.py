@@ -1,7 +1,6 @@
-from django.urls import path, include
-from .views import products
-
+from django.urls import path
+from .views import products, category
 
 urlpatterns = [
-    
+
 ]
