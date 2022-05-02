@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
-from mainapp.views import index, contacts, products
+from mainapp.views import category, index, contacts, products
 from django.views.generic.base import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -30,7 +30,11 @@ urlpatterns = [
     path('<int:slide_number>/', index, name='index'),
     path('contacts/', contacts, name='contacts'),
     path('products/', products, name='products'),
+    path('products/<int:category_id>', category, name='category'),
     path('auth/', include('authapp.urls', namespace='auth')),
+
+    path('basket/', include('basketapp.urls', namespace='basket')),
+
     re_path(r'^favicon\.ico$', favicon_view),
 ]
 
