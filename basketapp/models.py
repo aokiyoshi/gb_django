@@ -20,5 +20,9 @@ class Basket(models.Model):
 
     objects = BasketManager()
 
+    @property
+    def product_cost(self):
+        return self.product.price * self.quantity
+
     def __str__(self):
         return f'{self.product} - {self.quantity} шт'
