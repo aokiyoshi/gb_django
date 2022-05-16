@@ -1,0 +1,6 @@
+<td>Всего</td>
+<td>{{ request.user.basket.quantity}} шт.</td>
+<td>{{ request.user.basket.sum }} руб.</td>
+<td>
+    <a href="{% url 'basket:remove_all' %}">Удалить все</a>
+</td>

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
-from mainapp.views import category, index, contacts, products
+from mainapp.views import category, index, contacts, products, product
 from django.views.generic.base import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,15 +26,19 @@ favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', index, name='index'),
-    path('<int:slide_number>/', index, name='index'),
     path('contacts/', contacts, name='contacts'),
+
     path('products/', products, name='products'),
     path('products/<int:category_id>', category, name='category'),
+    path('product/<int:product_id>', product, name='product'),
+
     path('auth/', include('authapp.urls', namespace='auth')),
 
     path('basket/', include('basketapp.urls', namespace='basket')),
 
+    path('<int:slide_number>/', index, name='index'),
     re_path(r'^favicon\.ico$', favicon_view),
 ]
 

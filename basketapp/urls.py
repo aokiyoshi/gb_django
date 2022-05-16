@@ -9,4 +9,6 @@ urlpatterns = [
     path('add/<int:pk>/', basketapp.basket_add, name='add'),
     path('remove/<int:pk>/', basketapp.basket_remove, name='remove'),
     path('remove/all/', basketapp.basket_remove_all, name='remove_all'),
+    path('edit/<int:pk>/<int:quantity>/', basketapp.basket_edit, name='edit'),
+    path('basket_total/', basketapp.basket_total, name='basket_total'),
 ]

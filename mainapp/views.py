@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse
 from mainapp.models import Product, ProductCategory
+from random import choice
+
 
 MENU_LIST = {
     'index': 'Главная',
@@ -32,18 +34,37 @@ INDEX_SLIDER_LIST = [
     }
 ]
 
+# This is page with products and hot product on top 
 def products(request):
     products = Product.objects.all()[:]
     categories = ProductCategory.objects.all()[:]
+    hot_product = choice(products)
     return render(
         request,
         'mainapp/products.html',
         context = {
             'menu': MENU_LIST,
             'products': products,
+            'hot': hot_product,
             'categories': categories
         } 
     )
+
+# View for product page
+def product(request, product_id):
+    if Product.objects.filter(pk=product_id):
+        product = Product.objects.filter(id=product_id)[0]
+        categories = ProductCategory.objects.all()[:]
+        return render(
+            request,
+            'mainapp/product_page.html',
+            context = {
+                'menu': MENU_LIST,
+                'products': products,
+                'categories': categories,
+                'product': product,
+            } 
+        )
 
 def index(request, slide_number=1):
     return render(
@@ -67,6 +88,7 @@ def contacts(request):
 def category(request, category_id):
     if ProductCategory.objects.filter(id=category_id):
         products = Product.objects.filter(category=category_id)
+        hot_product = choice(products)
         categories = ProductCategory.objects.all()[:]
         return render(
             request,
@@ -74,6 +96,7 @@ def category(request, category_id):
             context = {
                 'menu': MENU_LIST,
                 'products': products,
+                'hot': hot_product,
                 'categories': categories,
                 'category_name': ProductCategory.objects.filter(pk=category_id).all()[0]
             } 

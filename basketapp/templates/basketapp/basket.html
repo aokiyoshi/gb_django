@@ -1,6 +1,7 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'basket-style.css' %}">
+<script src="{% static 'js/basket-script.js' %}"></script>
 
 <div class="category-products clearfix">
     <button>
@@ -17,24 +18,13 @@
             <th>Убрать</th>
         </tr>
         {% for basket_element in basket %}
-            <tr>
-                <td>{{basket_element.product.name}}</td>
-                <td>{{basket_element.quantity}} шт.</td>
-                <td>{{basket_element.product.price}}</td>
-                <td>
-                    <a href="{% url 'basket:remove' basket_element.pk %}">Удалить</a>
-                </td>
+            <tr class="basket-element{{basket_element.pk}}">
+                {% include 'basketapp/includes/basket_element.html' %}
             </tr>
         {% endfor %}
-            
-            <tr>
-                <td>Всего</td>
-                <td>{{ request.user.basket.quantity}} шт.</td>
-                <td>{{ request.user.basket.sum }}</td>
-                <td>
-                    <a href="{% url 'basket:remove_all' %}">Удалить все</a>
-                </td>
-            </tr>   
+        <tr class="basket-total">
+            {% include 'basketapp/includes/basket_total.html' %}
+        </tr>
     </table>
     {% else %}
         <br>

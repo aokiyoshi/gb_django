@@ -1,0 +1,7 @@
+<td >{{basket_element.product.name}}</td>
+<td>
+    <input type="number" name="{{ basket_element.pk }}" min="0" value="{{ basket_element.quantity }}">
+</td>
+<td>{{basket_element.product_cost}}</td>
+<td>
+    <button class="basket-delete" name="{{ basket_element.pk }}"> Удалить </button>
