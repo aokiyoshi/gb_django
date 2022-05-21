@@ -1,0 +1,18 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form class="login-form" action="{% url 'adminapp:categories' %}" method="post" enctype="multipart/form-data">
+        <br>
+        <div class="content">
+            {% csrf_token %}
+            <div class = "input-field">
+                {{ update_form.as_p }}
+            </div>
+            <br>
+            <div class="action">
+                <button type="submit">сохранить</button>
+            </div>  
+        </div>
+    </form>
+{% endblock  %}
