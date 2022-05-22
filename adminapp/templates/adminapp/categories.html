@@ -1,0 +1,36 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="categories_list">
+        <button class="new_category">
+            <a href={% url 'admin:category_create' %}>новая категория</a>
+        </button>
+        <table>
+            <tr>
+                <th>Название категории</th>
+                <th>Товары</th>
+                <th>Редактирование</th>
+                <th>Деактивировать</th>
+            </tr>
+            {% for object in objects %}
+                <tr class="user_record"
+                    {% if not object.is_active %} style="background-color:grey"{% endif %}>
+                    <td>{{ object.name|title }}</td>
+                    <td>
+                        <a href={% url 'admin:products' object.pk %}>товары категории</a>
+                    </td>
+                    <td>
+                        <a href={% url 'admin:category_update' object.pk %}>редактировать</a>
+                    </td>
+                    <td>
+                    {% if object.is_active %}
+                        <a href={% url 'admin:category_activate' object.pk %}>Деактивировать</a>
+                    {% else %}
+                        <a href={% url 'admin:category_deactivate' object.pk %}>Активировать</a>
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

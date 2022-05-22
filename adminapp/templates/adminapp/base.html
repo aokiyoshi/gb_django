@@ -1,0 +1,14 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'basket-style.css' %}">
+
+<body>
+    <div class="admin_container">
+        <div class="h2 text-center head">Админка</div>
+        {% block menu %}
+            <div class="admin_menu">{% include 'adminapp/includes/menu.html' %}</div>
+        {% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

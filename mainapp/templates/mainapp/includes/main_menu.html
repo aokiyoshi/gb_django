@@ -20,6 +20,12 @@
                     </a>
                 </li>
         {% endif %}
+        
+        {% if user.is_superuser %}
+            <a href="{% url 'admin:users' %}">
+                админка
+            </a>
+        {% endif %}
 
         {% if user.is_authenticated %}
             <a href="{% url 'auth:logout' %}">

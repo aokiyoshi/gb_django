@@ -1,0 +1,39 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="users_list">
+        <button class="new_user">
+            <a href={% url 'admin:user_create' %}>новый пользователь</a>
+        </button>
+        <table>
+            <tr>
+                <th>Имя</th>
+                <th>Изображение</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Редактирование</th>
+                <th>Деактивировать</th>
+            </tr>
+            {% for object in objects %}
+                    <tr class="user_record" {% if not object.is_active %} style="background-color:grey" {% endif %}>
+                        <td> {{object.name}}</td>
+                        <td><img
+                            src="/media/{{ object.image}}"
+                            width="64" height="64"
+                            alt="Нет картинки">
+                        </td>
+                        <td> {{object.description}}</td>
+                        <td> {{object.price}} руб.</td>
+                        <td>
+                            <a href="#">Редактировать</a>
+                        </td>
+                        {% if object.is_active %} 
+                            <td> <a href="#">Деактивировать</a> </td>
+                        {% else %}
+                            <td> <a href="#">Активировать</a> </td>
+                        {% endif %}
+                    </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
