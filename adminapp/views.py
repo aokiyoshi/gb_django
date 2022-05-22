@@ -28,7 +28,6 @@ def user_create(request):
 
     if request.method == 'POST':
         user_form = ShopUserRegisterForm(request.POST, request.FILES)
-
         if user_form.is_valid():
             user_form.save()
             return HttpResponseRedirect(reverse('admin:users'))

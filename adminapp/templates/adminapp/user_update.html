@@ -1,23 +1,12 @@
 {% extends 'authapp/base.html' %}
 {% load static %}
-
 {% block content %}
-    <form class="login-form" action="{% url 'adminapp:users' %}" method="post" enctype="multipart/form-data">
-        <br>
-        <center>
-            <div>
-                <img src="/media/{{ user.avatar }}"  width="124" height="124" class="avatar">
-            </div>
-        </center>
-        <div class="content">
-            {% csrf_token %}
-            <div class = "input-field">
-                {{ update_form.as_p }}
-            </div>
-            <br>
-            <div class="action">
-                <button type="submit">сохранить</button>
-            </div>  
-        </div>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ update_form.as_p }}
+        <input class="form-control" type="submit" value="сохранить">
     </form>
-{% endblock  %}
+    <button class="btn btn-round form-control last">
+        <a href="{% url 'admin:users' %}">к списку пользователей</a>
+    </button>
+{% endblock %}
