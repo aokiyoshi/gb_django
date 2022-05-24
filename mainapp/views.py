@@ -36,7 +36,7 @@ INDEX_SLIDER_LIST = [
 
 # This is page with products and hot product on top 
 def products(request):
-    products = Product.objects.all()[:]
+    products = Product.objects.filter(is_active=True)[:]
     categories = ProductCategory.objects.filter(is_active=True)[:]
     hot_product = choice(products)
     return render(
@@ -87,7 +87,7 @@ def contacts(request):
 
 def category(request, category_id):
     if ProductCategory.objects.filter(id=category_id):
-        products = Product.objects.filter(category=category_id)
+        products = Product.objects.filter(is_active=True, category=category_id)
         hot_product = choice(products)
         categories = ProductCategory.objects.filter(is_active=True)[:]
         return render(
