@@ -3,7 +3,7 @@
 {% block content %}
     <div class="users_list">
         <button class="new_user">
-            <a href={% url 'admin:user_create' %}>новый пользователь</a>
+            <a href={% url 'admin:product_create' pk %}>новый товар</a>
         </button>
         <table>
             <tr>
@@ -14,7 +14,7 @@
                 <th>Редактирование</th>
                 <th>Деактивировать</th>
             </tr>
-            {% for object in objects %}
+            {% for object in object_list %}
                     <tr class="user_record" {% if not object.is_active %} style="background-color:grey" {% endif %}>
                         <td> {{object.name}}</td>
                         <td><img
@@ -25,15 +25,32 @@
                         <td> {{object.description}}</td>
                         <td> {{object.price}} руб.</td>
                         <td>
-                            <a href="#">Редактировать</a>
+                            <a href="{% url 'admin:product_update' object.pk %}">Редактировать</a>
                         </td>
                         {% if object.is_active %} 
-                            <td> <a href="#">Деактивировать</a> </td>
+                            <td> <a href="{% url 'admin:product_deactivate' object.pk %}">Деактивировать</a> </td>
                         {% else %}
-                            <td> <a href="#">Активировать</a> </td>
+                            <td> <a href="{% url 'admin:product_activate' object.pk %}">Активировать</a> </td>
                         {% endif %}
                     </tr>
             {% endfor %}
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                {% endif %}
+        
+                <span class="current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Следующая страница</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Последняя страница &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 {% endblock %}
