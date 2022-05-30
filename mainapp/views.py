@@ -4,12 +4,6 @@ from mainapp.models import Product, ProductCategory
 from random import choice
 
 
-MENU_LIST = {
-    'index': 'Главная',
-    'products': 'Продукты',
-    'contacts': 'Контакты',
-}
-
 INDEX_SLIDER_LIST = [
     {
         'toptitle': 'Тенденции',
@@ -43,7 +37,6 @@ def products(request):
         request,
         'mainapp/products.html',
         context = {
-            'menu': MENU_LIST,
             'products': products,
             'hot': hot_product,
             'categories': categories
@@ -59,7 +52,6 @@ def product(request, product_id):
             request,
             'mainapp/product_page.html',
             context = {
-                'menu': MENU_LIST,
                 'products': products,
                 'categories': categories,
                 'product': product,
@@ -71,7 +63,6 @@ def index(request, slide_number=1):
         request,
         'mainapp/index.html',
         context = {
-            'menu': MENU_LIST,
             'slider_content': INDEX_SLIDER_LIST[slide_number]
         } 
     )
@@ -79,10 +70,7 @@ def index(request, slide_number=1):
 def contacts(request):
     return render(
         request,
-        'mainapp/contact.html',
-        context = {
-            'menu': MENU_LIST
-        } 
+        'mainapp/contact.html'
     )
 
 def category(request, category_id):
@@ -94,7 +82,6 @@ def category(request, category_id):
             request,
             'mainapp/products.html',
             context = {
-                'menu': MENU_LIST,
                 'products': products,
                 'hot': hot_product,
                 'categories': categories,
