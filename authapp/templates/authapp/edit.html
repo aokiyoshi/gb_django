@@ -5,8 +5,9 @@
     <form class="login-form" action="{% url 'authapp:edit' %}" method="post" enctype="multipart/form-data">
         <br>
         <center>
+            <br>
             <div>
-                <img src="/media/{{ user.avatar }}" class="avatar">
+                <img src="/media/{{ user.avatar }}" width="128" height="128" class="avatar">
             </div>
         </center>
         <div class="content">
