@@ -15,28 +15,30 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import RedirectView
-from mainapp.views import category, contacts, index, product, products
+from mainapp.views import ProductList, ProductView, IndexView, ContactsView, CategoryList
+import mainapp
 
 favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('admin/', include('adminapp.urls', namespace='admin')),
-    
-    path('', index, name='index'),
-    path('contacts/', contacts, name='contacts'),
 
-    path('products/', products, name='products'),
-    path('products/<int:category_id>', category, name='category'),
-    path('product/<int:product_id>', product, name='product'),
+    path('', include('social_django.urls', namespace='social')),
+    
+    path('', IndexView.as_view(), name='index'),
+    path('contacts/', ContactsView.as_view(), name='contacts'),
+
+    path('products/', ProductList.as_view(), name='products'),
+    path('products/<int:pk>', CategoryList.as_view(), name='category'),
+    path('product/<int:pk>', ProductView.as_view(), name='product'),
 
     path('auth/', include('authapp.urls', namespace='auth')),
 
     path('basket/', include('basketapp.urls', namespace='basket')),
 
-    path('<int:slide_number>/', index, name='index'),
+    path('<int:slide_number>/', IndexView.as_view(), name='index'),
     re_path(r'^favicon\.ico$', favicon_view),
 ]
 

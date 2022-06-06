@@ -1,90 +1,88 @@
-from django.shortcuts import render
-from django.urls import reverse
-from mainapp.models import Product, ProductCategory
 from random import choice
 
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic import DetailView, TemplateView
+from django.views.generic.list import ListView
 
-INDEX_SLIDER_LIST = [
-    {
-        'toptitle': 'Тенденции',
-        'title': 'удобные стулья',
-        'description': 'НОВЫЙ уровень комфорта. Отличные характеристики.',
-        'button_text': 'заказать',
-        'image': 'img/slider.jpg'
-    },
-    {
-        'toptitle': 'Наш выбор',
-        'title': 'Светильники для дома',
-        'description': 'Минималистичный дизайн. Высокая надежность',
-        'button_text': 'заказать',
-        'image': 'img/slider-hotdeal.jpg'
-    },
-    {
-        'toptitle': 'Лучшая статья',
-        'title': 'Как выбрать диван для гостинной',
-        'description': 'Мнение экспертов в области',
-        'button_text': 'читать',
-        'image': 'img/slider_art.jpg'
-    }
-]
+from mainapp.models import Product, ProductCategory
 
-# This is page with products and hot product on top 
-def products(request):
-    products = Product.objects.filter(is_active=True)[:]
-    categories = ProductCategory.objects.filter(is_active=True)[:]
-    hot_product = choice(products)
-    return render(
-        request,
-        'mainapp/products.html',
-        context = {
-            'products': products,
-            'hot': hot_product,
-            'categories': categories
-        } 
-    )
+INDEX_SLIDER_LIST = [{
+    'toptitle': 'Тенденции',
+    'title': 'удобные стулья',
+    'description': 'НОВЫЙ уровень комфорта. Отличные характеристики.',
+    'button_text': 'заказать',
+    'image': 'img/slider.jpg'
+}, {
+    'toptitle': 'Наш выбор',
+    'title': 'Светильники для дома',
+    'description': 'Минималистичный дизайн. Высокая надежность',
+    'button_text': 'заказать',
+    'image': 'img/slider-hotdeal.jpg'
+}, {
+    'toptitle': 'Лучшая статья',
+    'title': 'Как выбрать диван для гостинной',
+    'description': 'Мнение экспертов в области',
+    'button_text': 'читать',
+    'image': 'img/slider_art.jpg'
+}]
+
+
+# Products list view for 'All' category
+class ProductList(ListView):
+    model = Product
+    template_name = 'mainapp/products.html'
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True)[:]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = ProductCategory.objects.filter(
+            is_active=True)[:]
+        context["hot"] = choice(self.object_list)
+        return context
+
 
 # View for product page
-def product(request, product_id):
-    if Product.objects.filter(pk=product_id):
-        product = Product.objects.filter(id=product_id)[0]
-        categories = ProductCategory.objects.filter(is_active=True)[:]
-        return render(
-            request,
-            'mainapp/product_page.html',
-            context = {
-                'products': products,
-                'categories': categories,
-                'product': product,
-            } 
-        )
+class ProductView(DetailView):
+    model = Product
+    template_name = 'mainapp/product_page.html'
 
-def index(request, slide_number=1):
-    return render(
-        request,
-        'mainapp/index.html',
-        context = {
-            'slider_content': INDEX_SLIDER_LIST[slide_number]
-        } 
-    )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = ProductCategory.objects.filter(
+            is_active=True)[:]
+        return context
 
-def contacts(request):
-    return render(
-        request,
-        'mainapp/contact.html'
-    )
 
-def category(request, category_id):
-    if ProductCategory.objects.filter(id=category_id):
-        products = Product.objects.filter(is_active=True, category=category_id)
-        hot_product = choice(products)
-        categories = ProductCategory.objects.filter(is_active=True)[:]
-        return render(
-            request,
-            'mainapp/products.html',
-            context = {
-                'products': products,
-                'hot': hot_product,
-                'categories': categories,
-                'category_name': ProductCategory.objects.filter(pk=category_id).all()[0]
-            } 
-        )
+class IndexView(TemplateView):
+    template_name = 'mainapp/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slide_number = context.get('slide_number', 1)
+        context['slider_content'] = INDEX_SLIDER_LIST[slide_number]
+        return context
+
+
+class ContactsView(TemplateView):
+    template_name = 'mainapp/contact.html'
+
+
+class CategoryList(ListView):
+    model = Product
+    template_name = 'mainapp/products.html'
+
+    def get_queryset(self, **kwargs):
+        pk = self.kwargs['pk']
+        return self.model.objects.filter(is_active=True, category=pk)[:]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = ProductCategory.objects.filter(
+            is_active=True)[:]
+        context["hot"] = choice(self.object_list)
+        context['category_name'] = ProductCategory.objects.filter(
+            pk=self.kwargs['pk']).all()[0]
+        return context

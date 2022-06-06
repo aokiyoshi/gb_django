@@ -13,7 +13,12 @@
             <br>
             <div class="action">
                 <button type="submit">войти</button>
-            </div>  
+            </div>
+            <button class="btn btn-round form-control">
+                <a href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+                Вход через google+
+                </a>
+            </button>  
         </div>
     </form>
 {% endblock %}

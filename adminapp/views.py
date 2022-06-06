@@ -1,13 +1,14 @@
 from unicodedata import category
-from authapp.forms import ShopUserRegisterForm
+
 from authapp.models import ShopUser
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import HttpResponseRedirect, get_object_or_404, render
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from mainapp.models import Product, ProductCategory
+
 
 # Mixins
 class TitleMixin:
@@ -38,7 +39,7 @@ class UserCreate(TitleMixin, CreateView):
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class UserUpdate(UserCreate, UpdateView):
-     title = 'пользователи/редактирование'
+    title = 'пользователи/редактирование'
 
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/auth/login/')
@@ -96,12 +97,11 @@ class ProductsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pk"] =  self.kwargs['pk']
+        context["pk"] = self.kwargs['pk']
         return context
-    
+
     def get_queryset(self):
         return Product.objects.filter(category=self.kwargs['pk'])
-    
 
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
@@ -113,11 +113,14 @@ class ProductCreate(TitleMixin, CreateView):
     title = 'товары/создание'
 
     def form_valid(self, form):
-        form.cleaned_data['category'] = ProductCategory.objects.filter(pk=self.kwargs['pk'])
+        form.cleaned_data['category'] = ProductCategory.objects.filter(
+            pk=self.kwargs['pk'])
         return super().form_valid(form)
+
 
 class ProductUpdate(ProductCreate, UpdateView):
     title = 'товары/редактирование'
+
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/auth/login/')
 def product_act_deact(request, pk):

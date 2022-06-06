@@ -8,7 +8,7 @@
     </li>
     {% for category in categories %}
         <li>
-            <a href=" {% url 'category' category.id %} " class={% if url_name == 'category' and category_id == category.id %}active{% endif %}> 
+            <a href=" {% url 'category' category.pk %} " class={% if url_name == 'category' and category_id == category.id %}active{% endif %}> 
                 {{category.name}} 
             </a>
         </li>

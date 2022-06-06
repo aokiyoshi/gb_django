@@ -9,7 +9,7 @@
         {% endwith %}
     </div>
     <div class="related-products clearfix">
-        {% for  product in products %}
+        {% for  product in object_list %}
         <div class="block">
             <a href="{% url 'product' product.pk %}">
                 <img class="product-image" src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
