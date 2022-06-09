@@ -8,13 +8,19 @@
         <div class="content">
             {% csrf_token %}
             <div class = "input-field">
-                {{ login_form.as_table }}
+                {{ form.as_table }}
             </div>
             <br>
             <div class="action">
                 <button type="submit">войти</button>
             </div>  
         </div>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'social:begin' 'google-oauth2' %}?next="/">
+            Вход через google+
+            </a>
+        </button> 
     </form>
+    
 {% endblock %}
 

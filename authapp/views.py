@@ -1,3 +1,4 @@
+from turtle import title
 from django.conf import settings
 from django.contrib import auth
 from django.core.mail import send_mail
@@ -8,36 +9,31 @@ from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
                            ShopUserRegisterForm)
 from authapp.models import ShopUser
 
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.edit import CreateView, UpdateView
 
-def login(request):
-    title = 'вход'
-
-    login_form = ShopUserLoginForm(data=request.POST)
-    if request.method == 'POST' and login_form.is_valid():
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-        if user and user.is_active:
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('index'))
-
-    content = {'title': title, 'login_form': login_form}
-    return render(request, 'authapp/login.html', content)
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class Login(LoginView):
+    template_name = 'authapp/login.html'
+    form_class = ShopUserLoginForm
 
 
-def register(request):
+class Logout(LogoutView):
+    next_page = '/'
+
+
+class RegisterView(CreateView):
     title = 'регистрация'
 
-    register_form = ShopUserRegisterForm()
+    template_name = 'authapp/register.html'
 
-    if request.method == 'POST':
-        register_form = ShopUserRegisterForm(request.POST, request.FILES)
+    form_class = ShopUserRegisterForm
+
+    def post(self, request, *args, **kwargs):
+        register_form = self.get_form()
         if register_form.is_valid():
             user = register_form.save()
             register_form.save()
@@ -46,9 +42,6 @@ def register(request):
             else:
                 print('ошибка отправки сообщения')
             return HttpResponseRedirect(reverse('auth:login'))
-
-    content = {'title': title, 'register_form': register_form}
-    return render(request, 'authapp/register.html', content)
 
 
 def edit(request):

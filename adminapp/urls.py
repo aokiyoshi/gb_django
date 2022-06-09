@@ -23,4 +23,6 @@ urlpatterns = [\
           name='product_update'),
      path('products/activate/<int:pk>/', adminapp.product_act_deact, name='product_activate'),
      path('products/deactivate/<int:pk>/', adminapp.product_act_deact, name='product_deactivate'),
+
+     path('orders/', adminapp.OrderList.as_view(), name='orders'),
 ]

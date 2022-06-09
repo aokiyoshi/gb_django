@@ -1,0 +1,36 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="categories_list">
+        <button class="new_category">
+            <a href={% url 'admin:category_create' %}>новая категория</a>
+        </button>
+        <table>
+            <tr>
+                <th>Пользователь</th>
+                <th>Товар</th>
+                <th>Статус</th>
+                <th>Создан</th>
+                <th>Заказ</th>
+            </tr>
+            {% for object in object_list %}
+                <tr class="user_record"
+                    {% if not object.is_active %} style="background-color:grey"{% endif %}>
+                    <td>{{ object.order.user|title }}</td>
+                    <td>
+                        {{ object.product.name|title }}
+                    </td>
+                    <td>
+                        {{ object.order.status|title }}
+                    </td>
+                    <td>
+                        {{ object.order.created|title }}
+                    </td>
+                    <td>
+                        {{ object.order.id|title }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
