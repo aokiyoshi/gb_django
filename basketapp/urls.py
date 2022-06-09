@@ -5,10 +5,10 @@ import basketapp.views as basketapp
 app_name = 'basketapp'
 
 urlpatterns = [
-    path('', basketapp.basket, name='view'),
-    path('add/<int:pk>/', basketapp.basket_add, name='add'),
-    path('remove/<int:pk>/', basketapp.basket_remove, name='remove'),
-    path('remove/all/', basketapp.basket_remove_all, name='remove_all'),
-    path('edit/<int:pk>/<int:quantity>/', basketapp.basket_edit, name='edit'),
+    path('', basketapp.BasketView.as_view(), name='view'),
+    path('add/<int:pk>/', basketapp.BasketAdd.as_view(), name='add'),
+    path('remove/<int:pk>/', basketapp.BasketRemove.as_view(), name='remove'),
+    path('remove/all/', basketapp.BasketRemoveAll.as_view(), name='remove_all'),
+    path('edit/<int:pk>/<int:quantity>/', basketapp.BasketEdit.as_view(), name='edit'),
     path('basket_total/', basketapp.basket_total, name='basket_total'),
 ]

@@ -17,7 +17,7 @@
             <th>Цена</th>
             <th>Убрать</th>
         </tr>
-        {% for basket_element in basket %}
+        {% for basket_element in request.user.basket.all %}
             <tr class="basket-element{{basket_element.pk}}">
                 {% include 'basketapp/includes/basket_element.html' %}
             </tr>
@@ -26,6 +26,12 @@
             {% include 'basketapp/includes/basket_total.html' %}
         </tr>
     </table>
+    <button>
+        <a href="{% url 'ordersapp:order_create' %}" class="">
+            Сделать заказ!
+        </a>
+    </button>
+
     {% else %}
         <br>
         <h2>В корзине пусто!</h2>

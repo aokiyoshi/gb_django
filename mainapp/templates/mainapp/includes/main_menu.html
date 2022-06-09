@@ -12,41 +12,42 @@
         </li>
         {% endfor %}
         {% endwith %}
-
+       
+        
+        
         {% if user.is_authenticated %}
-                <li>
-                    <a href="{% url 'auth:edit' %}">
-                        {{ user.first_name|default:'Пользователь' }}
+        <div class="dropdown">
+            <a href="#">{{ user.first_name|default:user.username }}</a>
+            <div class="dropdown-content">
+                {% if user.is_superuser %}
+                    <a href="{% url 'admin:users' %}">
+                        админка
                     </a>
-                </li>
+                {% endif %}
+                <a href="{% url 'auth:edit' %}">
+                    Редактировать профиль
+                </a>
+                <a href="{% url 'basket:view' %}">
+                    Корзина({{request.user.basket.quantity}})
+                </a>
+                <a href="{% url 'ordersapp:orders_list' %}">
+                    Заказы
+                </a>
         {% endif %}
-        
-        {% if user.is_superuser %}
-            <a href="{% url 'admin:users' %}">
-                админка
-            </a>
-        {% endif %}
-
         {% if user.is_authenticated %}
-            <a href="{% url 'auth:logout' %}">
-                выйти
-            </a>
-        {% else %}
-            <a href={% url 'auth:login' %}>
-                войти
-            </a>
-            <a href="{% url 'auth:register' %}">
-                зарегистрироваться
-            </a>
+                    <a href="{% url 'auth:logout' %}">
+                        выйти
+                    </a>
+                        {% else %}
+                    <a href={% url 'auth:login' %}>
+                        войти
+                    </a>
+                    <a href="{% url 'auth:register' %}">
+                        зарегистрироваться
+                    </a>
         {% endif %}
-        
-        {% if user.is_authenticated %}
-        <li>
-            <a href="{% url 'basket:view' %}">
-                <i class='fa fa-shopping-cart'></i>
-                <sup>({{request.user.basket.quantity}})</sup>
-            </a>
-        </li>
-        {% endif %}
+            </div>
+          </div> 
+       
     </ul>
 </div>

@@ -1,0 +1,53 @@
+{% extends 'ordersapp/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+    <div class="users_list">
+        <button>
+            <a href="{% url 'index' %}" class="">
+                < на главную
+            </a>
+        </button>
+        <table>
+            <tr>
+                <th>Номер заказа</th>
+                <th>Статус</th>
+                <th>Создан</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for object in object_list %}
+                <tr class="user_record"
+                    {% if not object.is_active %} style="background-color:grey"{% endif %}>
+                    <td>
+                        {{ object.id|title }}
+                    </td>
+                    <td>
+                        {{ object.get_status_display|title }}
+                    </td>
+                    <td>
+                        {{ object.created|naturalday }}
+                    </td>
+                    <td>
+                        <a href="{% url 'ordersapp:order_edit' object.id %}" class="">
+                            Редактировать
+                        </a>
+                    </td>
+                    <td>
+                        {% if object.status == 'created' %}
+                            <a href="{% url 'ordersapp:order_pay' object.id %}" class="">
+                                Оплатить
+                            </a>
+                        {% endif %}
+                        {% if object.status == 'paid' %}
+                            <a href="{% url 'ordersapp:order_cansel' object.id %}" class="">
+                                Отменить оплату
+                            </a>
+                        {% endif %}
+                        
+                    </td>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
