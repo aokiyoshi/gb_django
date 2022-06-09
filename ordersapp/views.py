@@ -63,12 +63,31 @@ class OrderChangeStatus(View):
         return HttpResponseRedirect(reverse_lazy('orders:orders_list'))
 
 
-class OrderPay(OrderChangeStatus, View):
+class OrderChangeActivity(View):
+    status = None
+
+    def get(self, *args, **kwargs):
+        print('!')
+        order = get_object_or_404(Order, pk=self.kwargs['pk'])
+        order.is_active = self.status
+        order.save()
+        return HttpResponseRedirect(reverse_lazy('orders:orders_list'))
+
+
+class OrderPay(OrderChangeStatus):
     status = Order.PAID
 
 
-class OrderCansel(OrderChangeStatus, View):
+class OrderCansel(OrderChangeStatus):
     status = Order.CREATED
+
+
+class OrderActivate(OrderChangeActivity):
+    status = True
+
+
+class OrderDectivate(OrderChangeActivity):
+    status = False
 
 
 def create_order(request):

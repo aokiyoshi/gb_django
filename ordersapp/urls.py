@@ -10,6 +10,8 @@ urlpatterns = [
     path('order/<int:pk>', ordersapp.OrderEdit.as_view(), name='order_edit'),
     path('pay/<int:pk>', ordersapp.OrderPay.as_view(), name='order_pay'),
     path('cansel/<int:pk>', ordersapp.OrderCansel.as_view(), name='order_cansel'),
+    path('activate/<int:pk>', ordersapp.OrderActivate.as_view(), name='order_activate'),
+    path('deactivate/<int:pk>', ordersapp.OrderDectivate.as_view(), name='order_deactivate'),
 #     path('update/<int:pk>',
 #          ordersapp.OrderItemsUpdate.as_view(),
 #          name='order_update'),
