@@ -16,6 +16,7 @@
                 <th>Создан</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for object in object_list %}
                 <tr class="user_record"
@@ -45,7 +46,17 @@
                                 Отменить оплату
                             </a>
                         {% endif %}
-                        
+                    </td>
+                    <td>
+                        {% if object.is_active%}
+                            <a href="{% url 'ordersapp:order_deactivate' object.id %}" class="">
+                                Удалить
+                            </a>
+                        {% else %}
+                            <a href="{% url 'ordersapp:order_activate' object.id %}" class="">
+                                Вернуть
+                            </a>
+                        {% endif %}
                     </td>
             {% endfor %}
         </table>
