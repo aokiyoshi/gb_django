@@ -1,16 +1,14 @@
-from unicodedata import category
-from authapp.forms import ShopUserRegisterForm
 from authapp.models import ShopUser
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import HttpResponseRedirect, get_object_or_404, render
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from mainapp.models import Product, ProductCategory
 
-from ordersapp.models import OrderItem
-
+from ordersapp.models import OrderItem, Order
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Mixins
 class TitleMixin:
@@ -21,6 +19,9 @@ class TitleMixin:
         context["title"] = self.title
         return context
 
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
 
 # Users
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
@@ -138,3 +139,23 @@ def product_act_deact(request, pk):
 class OrderList(ListView):
     model = OrderItem
     template_name = 'adminapp/orders.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["orders"] = Order.objects.all()
+        return context
+    
+
+@user_passes_test(lambda u: u.is_superuser, login_url='/auth/login/')
+def order_send(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    order.status = Order.SENT
+    order.save()
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class OrderDelete(SuperUserRequiredMixin, DeleteView):
+    model = Order
+    success_url = reverse_lazy('admin:orders')

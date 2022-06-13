@@ -25,4 +25,6 @@ urlpatterns = [\
      path('products/deactivate/<int:pk>/', adminapp.product_act_deact, name='product_deactivate'),
 
      path('orders/', adminapp.OrderList.as_view(), name='orders'),
+     path('send/<int:pk>', adminapp.order_send, name='order_send'),
+     path('delete/<int:pk>', adminapp.OrderDelete.as_view(), name='order_delete'),
 ]

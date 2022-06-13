@@ -1,18 +1,21 @@
-from django.shortcuts import get_object_or_404, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
-from django.db import transaction
-from django.views import View
-from django.views.generic import ListView, UpdateView, DeleteView
-from requests import request
 from basketapp.models import Basket
-from ordersapp.models import Order, OrderItem
+from django.db import transaction
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch import receiver
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.views import View
+from django.views.generic import DeleteView, ListView, UpdateView
 from django.views.generic.base import ContextMixin
+from requests import request
+
+from ordersapp.models import Order, OrderItem
+
 from .forms import OrderFormSet
 
 
 class OrderList(ListView):
     model = Order
-
     template_name = 'ordersapp/order_list.html'
 
     def get_queryset(self):
@@ -48,8 +51,7 @@ class OrderEdit(UpdateView):
 
     def form_invalid(self, form, formset):
         return self.render_to_response(
-            self.get_context_data(form=form, formset=formset)
-        )
+            self.get_context_data(form=form, formset=formset))
 
 
 class OrderChangeStatus(View):
@@ -78,9 +80,13 @@ def create_order(request):
     order.save()
     for item in basket:
         product = item.product
-        order_item = OrderItem(product=product,
-                               order=order,
-                               quantity=item.quantity)
-        order_item.save()
+        if product.quantity >= item.quantity:
+            product.quantity -= item.quantity
+            order_item = OrderItem(product=product,
+                                order=order,
+                                quantity=item.quantity)
+            order_item.save()
+        product.save()
         item.delete()
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
+

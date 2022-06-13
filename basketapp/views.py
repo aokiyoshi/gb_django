@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class BasketView(LoginRequiredMixin, ListView):
+    title = 'Корзина'
     model = Basket
     template_name = 'basketapp/basket.html'
 
@@ -51,7 +52,6 @@ class BasketRemove(LoginRequiredMixin, View):
 class BasketEdit(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         basket = get_object_or_404(Basket, pk=self.kwargs['pk'])
-
         quantity = self.kwargs['quantity']
 
         if quantity == 0:
@@ -59,7 +59,8 @@ class BasketEdit(LoginRequiredMixin, View):
             result = ''
 
         else:
-            basket.quantity = quantity
+            if quantity <= basket.product.quantity:
+                basket.quantity = quantity
             result = render_to_string(
                 'basketapp/includes/basket_element.html',
                 context={
