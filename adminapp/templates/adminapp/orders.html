@@ -4,33 +4,48 @@
     <div class="categories_list">
         <button class="new_category">
             <a href={% url 'admin:category_create' %}>новая категория</a>
-        </button>
+        </button> <br>
+        <h2> Количество заказов: {{orders|length}} </h2>
+        {% for order in orders %}
         <table>
             <tr>
-                <th>Пользователь</th>
+                <th colspan="6">
+                    Заказ №{{order.id}}; 
+                    Пользователь: {{order.user}};
+                    {% if order.user.first_name %}
+                        Получатель: {{order.user.first_name}} {{order.user.last_name}};
+                    {% endif %}
+                    Статус заказа: {{order.get_status_display|title}}
+                </th>
+            </tr>
+            <tr>
                 <th>Товар</th>
-                <th>Статус</th>
-                <th>Создан</th>
-                <th>Заказ</th>
+                <th>Количество</th>
             </tr>
             {% for object in object_list %}
-                <tr class="user_record"
-                    {% if not object.is_active %} style="background-color:grey"{% endif %}>
-                    <td>{{ object.order.user|title }}</td>
+                {% if object.order.id == order.id %}
+                <tr class="user_record">
                     <td>
-                        {{ object.product.name|title }}
+                        {{ object.product.name}}
                     </td>
                     <td>
-                        {{ object.order.status|title }}
-                    </td>
-                    <td>
-                        {{ object.order.created|title }}
-                    </td>
-                    <td>
-                        {{ object.order.id|title }}
+                        {{ object.quantity}} шт.
                     </td>
                 </tr>
+                {% endif %}
             {% endfor %}
         </table>
+        <button>
+            <a href="{% url 'admin:order_send' order.pk %}" class="">
+                Отправить
+            </a>
+        </button>
+        <button>
+            <a href="{% url 'admin:order_delete' order.pk %}" class="">
+                Удалить
+            </a>
+        </button>
+        <br><br>
+        {% endfor %}
     </div>
 {% endblock %}

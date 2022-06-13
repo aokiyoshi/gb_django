@@ -1,4 +1,5 @@
 from random import choice
+from select import select
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -82,7 +83,8 @@ class CategoryList(ListView):
         context = super().get_context_data(**kwargs)
         context["categories"] = ProductCategory.objects.filter(
             is_active=True)[:]
-        context["hot"] = choice(self.object_list)
+        if self.object_list:
+            context["hot"] = choice(self.object_list)
         context['category_name'] = ProductCategory.objects.filter(
             pk=self.kwargs['pk']).all()[0]
         return context

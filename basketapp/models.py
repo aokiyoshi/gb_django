@@ -9,6 +9,7 @@ class BasketManager(models.Manager):
     def sum(self):
         return sum([item.product.price * item.quantity for item in self.all()])
 
+
 class Basket(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE, related_name='basket')
@@ -26,3 +27,8 @@ class Basket(models.Model):
 
     def __str__(self):
         return f'{self.product} - {self.quantity} шт'
+
+    def get_item(self, *args, **kwargs):
+        print(args)
+        pk = kwargs['pk']
+        return self.get(pk=pk)

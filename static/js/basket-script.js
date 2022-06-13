@@ -24,7 +24,10 @@ window.onload = function(){
             
             const url = "/basket/edit/" + event.target.name + "/" + event.target.value + "/";
 
+            console.log(url);
             const basketEl = document.querySelector(".basket-element" + event.target.name);
+
+            
 
             fetch(url)
                 .then(response => response.json())
