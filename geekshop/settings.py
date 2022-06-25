@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-zahj(swwvo(el$d#cxbb4u-3**)#+*ym7)r91^n^4c=1197**3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.103',]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'social_django',
+    "debug_toolbar",
 
     'mainapp',
     'authapp',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -188,3 +190,26 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+
+def show_toolbar(request):
+    return True
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+    'INSERT_BEFORE': '</head>'
+}
+
+if os.name == 'posix':
+	CACHE_MIDDLEWARE_ALIAS = 'default'
+	CACHE_MIDDLEWARE_SECONDS = 120
+	CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+	CACHES = {
+		'default': {
+			'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+			'LOCATION': '127.0.0.1:11211',
+			}
+		}
+
+LOW_CACHE = True

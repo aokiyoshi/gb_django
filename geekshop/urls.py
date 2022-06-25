@@ -24,6 +24,7 @@ favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('admin/', include('adminapp.urls', namespace='admin')),
+    path('__debug__/', include('debug_toolbar.urls')),
 
     path('', include('social_django.urls', namespace='social')),
     

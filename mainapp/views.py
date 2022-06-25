@@ -8,6 +8,10 @@ from django.views.generic.list import ListView
 
 from mainapp.models import Product, ProductCategory
 
+from django.conf import settings
+from django.core.cache import cache
+
+
 INDEX_SLIDER_LIST = [{
     'toptitle': 'Тенденции',
     'title': 'удобные стулья',
@@ -77,7 +81,17 @@ class CategoryList(ListView):
 
     def get_queryset(self, **kwargs):
         pk = self.kwargs['pk']
-        return self.model.objects.filter(is_active=True, category=pk)[:]
+        
+        if not settings.LOW_CACHE:
+            return self.model.objects.filter(is_active=True, category=pk)[:]
+
+        key = f'category_{pk}'
+        category = cache.get(key)
+        if category is None:
+            category = self.model.objects.filter(is_active=True, category=pk)[:]
+        
+        return category
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
