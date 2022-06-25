@@ -2,6 +2,8 @@
 
 <link rel="stylesheet" href="{% static 'basket-style.css' %}">
 <script src="{% static 'js/basket-script.js' %}"></script>
+<head>
+</head>
 
 <div class="category-products clearfix">
     <button>
@@ -9,7 +11,9 @@
             < на главную
         </a>
     </button>
-    {% if request.user.basket.quantity != 0 %}
+    {% with basket=request.user.basket %}
+    
+    {% if basket.quantity != 0 %}
     <table>
         <tr>
             <th>Название</th>
@@ -17,10 +21,12 @@
             <th>Цена</th>
             <th>Убрать</th>
         </tr>
-        {% for basket_element in request.user.basket.all %}
-            <tr class="basket-element{{basket_element.pk}}">
+        {% for basket_element in basket.all %}    
+    	{% with basket_summary=basket.get_basket %}
+	<tr class="basket-element{{basket_element.pk}}">
                 {% include 'basketapp/includes/basket_element.html' %}
-            </tr>
+            </tr>    
+    	{% endwith %}
         {% endfor %}
         <tr class="basket-total">
             {% include 'basketapp/includes/basket_total.html' %}
@@ -40,4 +46,6 @@
             <h2>За покупками!</h2>
         </a>
     {% endif %}
+
+    {% endwith %}
 </div>

@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from mainapp.models import Product
+from django.utils.functional import cached_property
+
 
 class BasketManager(models.Manager):
     def quantity(self):
@@ -21,14 +23,17 @@ class Basket(models.Model):
 
     objects = BasketManager()
 
-    @property
+    @cached_property
     def product_cost(self):
         return self.product.price * self.quantity
 
     def __str__(self):
         return f'{self.product} - {self.quantity} шт'
 
-    def get_item(self, *args, **kwargs):
-        print(args)
-        pk = kwargs['pk']
-        return self.get(pk=pk)
+    def get_basket(self, *args, **kwargs):
+        return {
+            'quantity': self.quantity,
+            'sum': self.objects.sum(),
+        }
+
+
