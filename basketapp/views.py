@@ -73,5 +73,16 @@ class BasketEdit(LoginRequiredMixin, View):
 @login_required
 def basket_total(request):
     user = request.user
-    total = render_to_string('basketapp/includes/basket_total_fetch.html', request=request, context={'user': user})
+    basket = Basket.objects.filter(user=self.request.user)
+    bsum = basket.sum()
+    bquantity = basket.quantity()
+    total = render_to_string(
+            'basketapp/includes/basket_total_fetch.html', 
+            request=request, 
+            context={
+                'user': user,
+                'sum': bsum,
+                'quantity': bquantity,
+                }
+            )
     return JsonResponse({'total': total})
