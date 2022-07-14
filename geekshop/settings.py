@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-zahj(swwvo(el$d#cxbb4u-3**)#+*ym7)r91^n^4c=1197**3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.103',]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'social_django',
     "debug_toolbar",
+    'columns',
 
     'mainapp',
     'authapp',
@@ -150,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'authapp.ShopUser'
 
-LOGIN_URL = '/auth/login'
+LOGIN_URL = '/auth/login/'
 
 LOGIN_REDIRECT_URL = '/'
 

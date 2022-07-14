@@ -1,53 +1,48 @@
-<div class="header clearfix">
-    <a href="/" class="logo"></a>
-    <ul class="menu">
-        {% with url_name=request.resolver_match.url_name %}
-        {% for link, name in menu.items %}
-        <li>
-            <a href="{% url link %}" class=
-                    {% if url_name == link %} active {% endif %}
-                    {% if link == 'products' and url_name == 'category' %} active {% endif %}>
-               {{name}}
-            </a>
-        </li>
-        {% endfor %}
-        {% endwith %}
-       
-        
-        
-        {% if user.is_authenticated %}
-        <div class="dropdown">
-            <a href="#">{{ user.first_name|default:user.username }}</a>
-            <div class="dropdown-content">
-                {% if user.is_superuser %}
-                    <a href="{% url 'admin:users' %}">
-                        админка
-                    </a>
-                {% endif %}
-                <a href="{% url 'auth:edit' %}">
-                    Редактировать профиль
-                </a>
-                <a href="{% url 'basket:view' %}">
-                    Корзина({{request.user.basket.quantity}})
-                </a>
-                <a href="{% url 'ordersapp:orders_list' %}">
-                    Заказы
-                </a>
-        {% endif %}
-        {% if user.is_authenticated %}
-                    <a href="{% url 'auth:logout' %}">
-                        выйти
-                    </a>
-                        {% else %}
-                    <a href={% url 'auth:login' %}>
-                        войти
-                    </a>
-                    <a href="{% url 'auth:register' %}">
-                        зарегистрироваться
-                    </a>
-        {% endif %}
-            </div>
-          </div> 
-       
-    </ul>
-</div>
+
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Geekshop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+	{% with url_name=request.resolver_match.url_name %}
+	{% for link, name in menu.items %}
+		<li class="nav-item 
+		{% if url_name == link %} active {% endif %}
+					{% if link == 'products' and url_name == 'category' %} active {% endif %}>">
+			<a class="nav-link" href="{% url link %}">{{name}}</a>
+		</li>
+	{% endfor %}
+    {% endwith %}
+
+	{% if not user.is_authenticated %}
+        <li class="nav-item">
+			<a class="nav-link" href="{% url 'auth:login' %}">Войти</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'auth:register' %}">Зарегистрироваться</a>
+		</li>
+	{% endif %}
+
+	{% if user.is_authenticated %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.first_name|default:user.username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		{% if user.is_superuser %}
+          <a class="dropdown-item" href="{% url 'admin:users' %}">Админка</a>
+		{% endif %}
+          <a class="dropdown-item" href="{% url 'auth:edit' %}">Редактировать профиль</a>
+          <a class="dropdown-item" href="{% url 'basket:view' %}">Корзина({{request.user.basket.quantity}})</a>
+		  <a class="dropdown-item" href="{% url 'ordersapp:orders_list' %}">Заказы</a>
+		  <a class="dropdown-item" href="{% url 'auth:logout' %}">Выйти</a>
+	{% endif %}
+		</div>
+	</li>
+	</ul>
+</nav>
+

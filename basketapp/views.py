@@ -24,12 +24,13 @@ class BasketAdd(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         product = get_object_or_404(Product, pk=self.kwargs['pk'])
 
+        quantity = self.kwargs.get('quantity', 1)
         basket = Basket.objects.filter(user=self.request.user, product=product).first()
 
         if not basket:
             basket = Basket(user=self.request.user, product=product)
 
-        basket.quantity += 1
+        basket.quantity += quantity
         basket.save()
 
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))

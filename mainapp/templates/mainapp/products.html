@@ -6,20 +6,11 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container">
-	<div class="hero-white">
-		{% include 'mainapp/includes/main_menu.html' %}
-	</div>
 
 	<div class="details">
 		<div class="links clearfix">
 			{% include 'mainapp/includes/product_categories.html' %}
 		</div>
 		
-		{% include 'mainapp/includes/hot_product.html' %}
-
 		{% include 'mainapp/includes/products_list.html' %}
-	</div>
-	<div class="clr"></div>
-</div>		
 {% endblock  %}
