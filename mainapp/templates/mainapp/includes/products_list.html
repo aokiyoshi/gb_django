@@ -1,28 +1,25 @@
 {% load static %}
 
-<div class="related">
-    <div class="title clearfix">
-        {% with url_name=request.resolver_match.url_name %}
-        <h2>
-           {% if url_name == 'products' %} Все товары: {% else %} {{category_name}}: {% endif %} 
-        </h2>
-        {% endwith %}
-    </div>
-    <div class="related-products clearfix">
-        {% for  product in object_list %}
-        <div class="block">
-            <a href="{% url 'product' product.pk %}">
-                <img class="product-image" src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
-                <div class="text">
-                    <img src="{% static 'img/icon-hover.png' %}" alt="img">
-                    <h4>{{product.name}}</h4>
-                    <p>{{product.description}}</p>
-                </div>
-            </a>
-        </div>
-        {% empty %}
-            Извините, в категории, нет товаров.
-        {% endfor %}
+{% load columns %}
 
-    </div>
-</div>
+<div class="row">
+    {% for col in object_list|columns:3 %}
+        <div class="col-md-4">
+            {% for product in col %}
+                <div class="card " style="width: 18rem;">
+                    <img src="{{ product.image.url }}" class="card-img-top img-fluid responsive" alt="{{ product.name }}">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ product.name }}</h5>
+                      <p class="card-text">{{ product.description|truncatechars:25 }}</p>
+                      <p class="card-text">{{ product.price }}руб.</p>
+                      <p class="card-text">( на складе {{ product.quantity }}шт.)</p>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{% url 'basket:add' product.pk %}" class="btn btn-primary">В корзину</a>
+                            <a href="{% url 'product' product.pk %}" class="btn btn-primary">Подробнее</a>
+                       </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div><!-- /col-md-4 -->
+    {% endfor %}
+</div><!-- /row -->

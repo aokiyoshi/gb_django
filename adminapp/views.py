@@ -9,6 +9,10 @@ from mainapp.models import Product, ProductCategory
 
 from ordersapp.models import OrderItem, Order
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .forms import ProductCategoryEditForm
+from mainapp.models import db_profile_by_type
+from django.db import connection
+from django.db.models import F
 
 # Mixins
 class TitleMixin:
@@ -19,9 +23,11 @@ class TitleMixin:
         context["title"] = self.title
         return context
 
+
 class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
+
 
 # Users
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
@@ -75,11 +81,19 @@ class CategoryCreateView(TitleMixin, CreateView):
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class CategoryUpdateView(UpdateView):
     model = ProductCategory
+    form_class = ProductCategoryEditForm
     template_name = 'adminapp/category_update.html'
     success_url = reverse_lazy('admin:categories')
-    fields = '__all__'
     title = 'категории/редактирование'
+    
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
 
+        return super().form_valid(form)
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/auth/login/')
 def category_act_deact(request, pk):

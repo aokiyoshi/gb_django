@@ -1,0 +1,32 @@
+{% load static %}
+
+<script src="{% static 'js/slider.js' %}"> </script>
+
+<div id="carouselSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-carousellength={{ slider_length }}>
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-index="0">
+      <img src="{{ slider_content.0.image }}" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>{{slider_content.0.title}}</h5>
+        <p>{{slider_content.0.description}}</p>
+      </div>
+    </div>
+    {% for slider_element in slider_content|slice:"1:" %}
+    <div class="carousel-item" data-index="{{ forloop.counter }}">
+      <img src="{{ slider_element.image }}" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>{{slider_element.title}}</h5>
+        <p>{{slider_element.description}}</p>
+      </div>
+    </div>
+    {% endfor %}
+    <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>

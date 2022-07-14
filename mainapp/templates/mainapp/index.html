@@ -1,4 +1,4 @@
-{% extends 'mainapp/base.html' %}
+{%extends 'mainapp/base.html' %}
 {% load my_tags %}
 {% load static %}
 
@@ -7,64 +7,6 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container">
-	<div class="slider" style = "background: url({% static slider_content.image %} )">
-		{% include 'mainapp/includes/main_menu.html' %}
+{% include 'mainapp/includes/carousel.html' %}
+{% endblock  %}	 
 
-		<div class="text-slider">
-			<h3 class="green">{{slider_content.toptitle}} {% current_year %} </h3>
-			<h3 class="big"> {{slider_content.title}}</h3>
-			<p>{{slider_content.description}}</p>
-			<a href="#" class="button-order">{{slider_content.button_text}}<img src="{% static 'img/arrow.png' %}" alt=""></a>
-		</div>
-		<div class="navi">
-			<a href="/0"></a><a href="/1"></a><a href="/2"></a>
-		</div>
-	</div>
-
-	<div class="featured">
-		<div class="featured-menu">
-				<a class="active" href="#">Популярные</a><a href="#">Новинки</a>
-		</div>
-		<a class="explore" href="#">показать все <img src="{% static 'img/arrow.png' %}" alt=""></a>
-		<div class="clearfix">
-		</div>
-		<div class="tab-content">
-			<div class="block">
-				<a href="#"><img src="{% static 'img/product-1.jpg' %}" alt=""> 
-					<div class="text">
-						<img src="{% static 'img/icon-hover.png' %}" alt="img">
-						<h4>Отличный стул</h4>
-						<p>Расположитесь комфортно. </p>
-					</div> 
-				</a>
-			</div>
-			<div class="block">
-				<a href="#"><img src="{% static 'img/product-2.jpg' %}" alt="">
-					<div class="text">
-						<img src="{% static 'img/icon-hover.png' %}" alt="">
-						<h4>Стул повышенного качества</h4>
-						<p>Не оторваться. </p>
-					</div>
-				</a>
-			</div>	
-		</div>
-	</div>
-	
-	{% for product in products %}
-	<div class="block">
-		<a href="#">
-			<img src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
-			<div class="text">
-				<h3>{{ product.category.name }}</h3>
-				<h4>{{ product.name }}</h4>
-				<p>{{ product.description }}</p>
-			</div>
-		</a>
-	</div>
-{% endfor %}
-
-	<div class="clr"></div>
-
-</div>
-{% endblock  %}	

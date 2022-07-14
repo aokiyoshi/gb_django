@@ -17,19 +17,19 @@ INDEX_SLIDER_LIST = [{
     'title': 'удобные стулья',
     'description': 'НОВЫЙ уровень комфорта. Отличные характеристики.',
     'button_text': 'заказать',
-    'image': 'img/slider.jpg'
+    'image': '/static/img/slider.jpg'
 }, {
     'toptitle': 'Наш выбор',
     'title': 'Светильники для дома',
     'description': 'Минималистичный дизайн. Высокая надежность',
     'button_text': 'заказать',
-    'image': 'img/slider-hotdeal.jpg'
+    'image': '/static/img/slider-hotdeal.jpg'
 }, {
     'toptitle': 'Лучшая статья',
     'title': 'Как выбрать диван для гостинной',
     'description': 'Мнение экспертов в области',
     'button_text': 'читать',
-    'image': 'img/slider_art.jpg'
+    'image': '/static/img/slider_art.jpg'
 }]
 
 
@@ -67,7 +67,8 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slide_number = context.get('slide_number', 1)
-        context['slider_content'] = INDEX_SLIDER_LIST[slide_number]
+        context['slider_content'] = INDEX_SLIDER_LIST
+        context['slider_length'] = len(INDEX_SLIDER_LIST)
         return context
 
 
